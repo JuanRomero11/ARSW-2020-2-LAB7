@@ -1,0 +1,5 @@
+Condiciones de carrera encontras:
+R/ la condicion de carrera encontrada fue en la lista de funciones ya que esta podia ser consultada y modificada de manera concurrente sin alun tipo de bloqueo.
+
+Regiones criticas encontrdas:
+R/ las regiones criteicas eran los todos metodos relacionados con get post y put que podrian ultilizar la lista de funciones.

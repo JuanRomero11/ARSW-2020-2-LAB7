@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Cinema bookings</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script src="js/stomp.js"></script>
+<script src="js/stompModel.js"></script>
+<script src="js/apimock.js"></script>
+<script src="js/apiclient.js"></script>
+<script src="js/app.js"></script>
+
+</head>
+
+<body>
+	<header>
+		<h1>Cinema bookings</h1>
+	</header>
+	<br>
+
+	<div>
+		<label for="nombre">Cinema</label> <input type="text" id="nombre"
+			name="nombre" placeholder="Cinema"> <input type="text"
+			id="fecha" name="fecha" placeholder="Fecha">
+		<button type="button" class="btn btn-primary"
+			onclick="app.getFunctionsByCinemaAndDate()">Get functions</button>
+	</div>
+
+	<div class="grid-item">
+		<h2 id="nombreCine">Cinema selected:</h2>
+		<h2>Functions:</h2>
+		<table class="table ">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Genre</th>
+					<th scope="col">Hour</th>
+					<th scope="col">Seats</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+
+
+	<div class="grid-item" id="myCanvas" style="text-align: center;">
+		<h2 id="moviename">Seats:</h2>
+		<canvas id="canvitas" width="700" height="450"
+			style="border: 1px solid BLUE;">
+			</canvas>
+		</div>	
+		
+		<div id="fecha1" style="text-align: center">
+			<div>
+			<label for="nombre">BUY</label> 
+			<input type="text" id="row" name="row" placeholder="Fila">
+			<input type="text" id="col" name="col" placeholder="Columna">
+			<button type="button" class="btn btn-primary" onclick="app.buyTicket()">BUY ticket</button>
+		</div>
+	</div>
+	
+
+	<div id="fecha1" style="text-align: center">
+		<div>
+			<label for="nombre">Administrator</label> 
+			<input type="text" id="nombre1" name="nFecha" placeholder="New fecha (con hora)">
+			<button type="button" class="btn btn-primary" onclick="app.salvar()">Save/Update</button>
+		</div>
+	</div>
+
+
+	<div style="text-align: center">
+		<button type="button" class="btn btn-primary" onclick="app.rellenarInfo()">Create function</button>
+		<button type="button" class="btn btn-danger" onclick="app.deleteF()">Delete</button>
+	</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script> app.init()</script>
+</html>
