@@ -11,7 +11,7 @@ app = (function () {
 	
 	var stompClient = null;
     var ticket = false;
-    
+	var texto;    
 
   class Seat {
         constructor(row, col) {
@@ -27,7 +27,7 @@ app = (function () {
         verifyAvailability(row, column);
     }
 
-    var connectAndSubscribe = function (callback) {
+    var connectAndSubscribe = function (referencia,callback) {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
@@ -35,7 +35,7 @@ app = (function () {
         //subscribe to /topic/TOPICXX when connections succeed
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/buyticket', function (message) {
+            stompClient.subscribe('/topic/buyticket'+referencia, function (message) {
                 //alert("evento recibido");
                 //var theObject = JSON.parse(message.body);
 				callback(message);
@@ -92,7 +92,7 @@ app = (function () {
 					  title: 'Completdo',
 					  text: 'ticket comprao',
 					})
-					stompClient.send("/topic/buyticket", {}, JSON.stringify(st));
+					stompClient.send("/topic/buyticket"+texto, {}, JSON.stringify(st));
 					flag=true;
 				}
 				x+=50;
@@ -111,10 +111,12 @@ app = (function () {
         var ctx = c.getContext("2d");
         const pixel = ctx.getImageData(x, y, 1, 1).data;
         if (!(pixel[0] == 0 && pixel[1] == 153 && pixel[2] == 0 && pixel[3] == 255)) { 
-        Swal.fire({
-			  icon: 'error',
-			  title: 'asiento ocupado',
-			})
+            
+            
+                Swal.fire({
+					  icon: 'error',
+					  title: 'asiento ocupado',
+					})
         } else {
             calcularAsiento(x, y);
         }
@@ -186,7 +188,11 @@ app = (function () {
 				+ movie.hour + '</td><td>' + 
 				"<input type='button' class='show' value='Disponibilidad' onclick=" + 
 				"app.busquedaSillas()" + 
-				"></input>" + '</tr>';
+				"></input>"+"<input type='button' class='show' value='Conectarse' onclick=" + 
+				"app.busquedaSillas()" + 
+				"></input>"	+ '</tr>';
+           
+			
             tblBody.append(fila);
         })
 		if(rellenodata){app.busquedaSillas(); rellenodata=false;}
@@ -209,9 +215,11 @@ app = (function () {
         })
         $("#moviename").text("Seats:"+movieName);
         $.getScript(moduloApiclient, function(){
-            
             api.getFunctionByNameAndDate(cine,fecha,movieName,insertarSillas);
         });
+		texto = cine + "." + fecha + "." + movieName;
+		
+        connectAndSubscribe(texto, validarEvento);
     }
 
     function insertarSillas(datos) {
