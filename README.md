@@ -5,8 +5,6 @@
 
 Este ejercicio se basa en la documentación oficial de SpringBoot, para el manejo de WebSockets con STOMP.
 En este repositorio se encuentra una aplicación SpringBoot que está configurado como Broker de mensajes, de forma similar a lo mostrado en la siguiente figura:
-
-	![image](https://github.com/csarssj/ARSW-LAB-7/blob/main/img/1.png)
 	
 En este caso, el manejador de mensajes asociado a "/app" aún no está configurado, pero sí lo está el broker '/topic'. Como mensaje, se usarán localizaciones de pantalla, pues se espera que esta aplicación permita propagar eventos de compra de asientos seleccionando en el canvas el asiento deseado. Este proyecto parte como continuación a el proyecto de compra/reserva de tickets.
 
