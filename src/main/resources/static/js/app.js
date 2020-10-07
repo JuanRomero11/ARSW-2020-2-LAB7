@@ -35,13 +35,19 @@ app = (function () {
         //subscribe to /topic/TOPICXX when connections succeed
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/buyticket'+referencia, function (message) {
+            stompClient.subscribe('/app/buyticket.'+referencia, function (message) {
                 //alert("evento recibido");
                 //var theObject = JSON.parse(message.body);
 				callback(message);
 				
             });
         });
+		stompClient.connect({}, function (frame) {
+                    console.log('Connected: ' + frame);
+                    stompClient.subscribe('/topic/buyticket.' + referencia, function (message) {
+                        callback(message);
+                    });
+                });
     };
 
 
@@ -53,10 +59,11 @@ app = (function () {
     }
 
 	function reDraw(fila, columna) {
+		console.info("toooooooooy");
         var c = document.getElementById("canvitas");
         var ctx = c.getContext("2d");
         ctx.fillStyle = "#ff0000";
-        ctx.fillRect((columna) * 50 , (fila) * 55 + 40 -55, 45, 40);
+        ctx.fillRect((columna) * 50 +50, (fila) * 55 + 40 , 45, 40);
     }
 
 	function getMousePosition() {
@@ -78,11 +85,11 @@ app = (function () {
 	    };
 
     var verifyAvailability = function (row, col) {
-        var st = new Seat(row, col);
+        var st = new Seat(row-1, col-1);
 		
 		var flag=false;
 		var y=40;
-		for (var i=0;i< va.seats.length+1;i++){
+		for (var i=0;i< va.seats.length;i++){
 			var x=0;
 			for (var j=0; j <= va.seats[i].length; j++){
 				if(va.seats[i][j]==true && row-1==i && col-1==j ){
@@ -92,7 +99,9 @@ app = (function () {
 					  title: 'Completdo',
 					  text: 'ticket comprao',
 					})
-					stompClient.send("/topic/buyticket"+texto, {}, JSON.stringify(st));
+					stompClient.send("/topic/buyticket."+texto, {}, JSON.stringify(st));
+					stompClient.send("/app/buyticket."+texto, {}, JSON.stringify(st));
+					//reDraw(i+1,j+1);
 					flag=true;
 				}
 				x+=50;
@@ -324,10 +333,6 @@ app = (function () {
 	}
 		
 	
-    function init(){
-        connectAndSubscribe(validarEvento);
-
-    }
 
     return {
         getFunctionsByCinemaAndDate: getFunctionsByCinemaAndDate,
@@ -335,7 +340,6 @@ app = (function () {
         salvar:salvar,
 		rellenarInfo:rellenarInfo,
 		deleteF:deleteF,
-		init: init,
         buyTicket: buyTicket,
 		getMousePosition: getMousePosition
         
